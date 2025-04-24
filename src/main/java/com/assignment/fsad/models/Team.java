@@ -33,12 +33,12 @@ public class Team {
 
     @OneToOne
     @JoinColumn(name = "owner")
-    private Employee owner;
+    private User owner;
 
     private String createdOnDate;
 
     @OneToMany
-    private List<Employee> members;
+    private List<User> members;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Task> tasks;

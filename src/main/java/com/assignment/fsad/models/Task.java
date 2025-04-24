@@ -40,11 +40,11 @@ public class Task {
 
     @OneToOne
     @JoinColumn(name = "assignee")
-    private Employee assignee;
+    private User assignee;
 
     @OneToOne
     @JoinColumn(name = "reporter")
-    private Employee reporter;
+    private User reporter;
 
     private Date dueDate;
 
