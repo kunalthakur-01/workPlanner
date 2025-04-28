@@ -17,7 +17,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<String> invalidCredentialsException( InternalServerException ex) {
+    public ResponseEntity<String> invalidCredentialsException(InvalidCredentialsException ex) {
         return ResponseEntity.status(401).body(ex.getMessage());
     }
 }
