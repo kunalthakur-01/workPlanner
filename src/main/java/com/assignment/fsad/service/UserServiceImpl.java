@@ -8,6 +8,8 @@ import com.assignment.fsad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -16,7 +18,19 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User signup(User user) {
-        return userRepository.save(user);
+        User existingUser = null;
+        try {
+            existingUser = userRepository.findByEmail(user.getEmail());
+            if(existingUser == null) {
+                existingUser = userRepository.save(user);
+            } else {
+                throw new ResourceNotFoundException("User already exists");
+            }
+        } catch (Exception e) {
+            System.out.printf("Error: %s", e.getMessage());
+            throw new InternalServerException(e.getMessage());
+        }
+        return existingUser;
     }
 
     @Override
@@ -27,6 +41,7 @@ public class UserServiceImpl implements UserService{
                 user = userRepository.findByEmail(email);
             }
         } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
             throw new InternalServerException(e.getMessage());
         }
 
@@ -34,5 +49,14 @@ public class UserServiceImpl implements UserService{
             throw new InvalidCredentialsException("Invalid credentials");
         }
         return user;
+    }
+
+    @Override
+    public void deleteUserById(UUID id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new InternalServerException("Failed to delete user");
+        }
     }
 }
