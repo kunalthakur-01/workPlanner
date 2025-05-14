@@ -28,6 +28,8 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String taskName;
+
     private TaskType type;
 
     private String summary;
