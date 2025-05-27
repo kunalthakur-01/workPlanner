@@ -16,5 +16,7 @@ public interface TeamService {
 
     void deleteTeam(UUID id);
 
+    void addMemberToTeam(UUID teamId, UUID userId);
+
 //    List<Team> getTeamsByUserId(Long userId);
 }

@@ -53,6 +53,11 @@ public class TeamController {
          teamService.deleteTeam(id);
          return ResponseEntity.noContent().build();
      }
+
+     @PostMapping("/{teamId}/addUser/{userId}")
+    public void addMemberToTeam(@PathVariable UUID teamId, @PathVariable UUID userId) {
+        teamService.addMemberToTeam(teamId, userId);
+    }
     // Example method to get teams by user ID
 //     @GetMapping("/user/{userId}")
 //     public ResponseEntity<List<Team>> getTeamsByUserId(@PathVariable Long userId) {

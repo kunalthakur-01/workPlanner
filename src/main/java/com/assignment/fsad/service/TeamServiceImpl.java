@@ -3,7 +3,9 @@ package com.assignment.fsad.service;
 import com.assignment.fsad.exception.InternalServerException;
 import com.assignment.fsad.exception.ResourceNotFoundException;
 import com.assignment.fsad.models.Team;
+import com.assignment.fsad.models.User;
 import com.assignment.fsad.repository.TeamRepository;
+import com.assignment.fsad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService{
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Team createTeam(Team team) {
@@ -72,6 +77,25 @@ public class TeamServiceImpl implements TeamService{
             teamRepository.deleteById(id);
         } catch (Exception e) {
             throw new InternalServerException("Failed to delete team");
+        }
+    }
+
+    @Override
+    public void addMemberToTeam(UUID teamId, UUID userId) {
+        if (teamId == null || userId == null) {
+            throw new NullPointerException("Team ID or User ID is NULL");
+        }
+
+        try {
+            Team team = teamRepository.findById(teamId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+//             Assuming you have a method to find user by ID
+             User user = userRepository.findById(userId)
+                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+             team.getMembers().add(user);
+             teamRepository.save(team);
+        } catch (Exception e) {
+            throw new InternalServerException("Failed to add member to team");
         }
     }
 
