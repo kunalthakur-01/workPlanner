@@ -11,7 +11,7 @@ import Team from "./pages/Team"
 import Reports from "./pages/Reports"
 import ProtectedRoute from "./components/ProtectedRoute"
 import { initialData } from "./data/initialData"
-import MainPage from "./pages/MainPage"
+import Signup from "./pages/Signup"
 
 function App() {
   const [appData, setAppData] = useState(initialData)
@@ -30,7 +30,6 @@ function App() {
     <AppProvider value={{ appData, setAppData, notifications, addNotification }}>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/main" element={<MainPage />} />
         <Route
           path="/"
           element={

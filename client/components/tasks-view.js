@@ -1,5 +1,5 @@
 "use client"
-
+import DialogBox from "./DialogBox"
 import { useContext, useState, useEffect } from "react"
 import { AppContext } from "@/lib/app-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -185,10 +185,38 @@ export default function TasksView() {
     setTaskToApprove(task)
     setApprovalDialogOpen(true)
   }
+  const[openDialog,setOpenDialog] = useState(false)
+
+  const inputs=[
+    {
+      name:"Title",
+      type:"text"
+    },
+    {
+      name:"Subtitle",
+      type:"text"
+    },
+    {
+      name:"Assigned to",
+      type:"text"
+    },
+    {
+      name:"Description",
+      type:"text"
+    },
+    {
+      name:"Status",
+      type:"text"
+    },
+    {
+      name:"Due date",
+      type:"date"
+    },
+  ]
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Tasks</h1>
           <p className="text-muted-foreground">
@@ -297,9 +325,14 @@ export default function TasksView() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
+      </div> */}
+      {
+      openDialog &&
+    <DialogBox inputs={inputs} title={"Create new project"} handler={setOpenDialog}/>
+     }
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:w-[600px]">
           <TabsTrigger value="all">All Tasks</TabsTrigger>
           <TabsTrigger value="pending">Pending</TabsTrigger>
@@ -307,7 +340,8 @@ export default function TasksView() {
           <TabsTrigger value="in-progress">In Progress</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
-
+          <button className="bg-primary text-white px-4 py-2 rounded text-sm" onClick={()=>setOpenDialog(true)}>+ Create task</button>
+        </div>
         <TabsContent value={activeTab} className="mt-6">
           {filteredTasks.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 border rounded-lg bg-muted/50">

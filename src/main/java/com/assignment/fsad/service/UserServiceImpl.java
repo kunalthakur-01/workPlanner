@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService{
             if(existingUser == null) {
                 existingUser = userRepository.save(user);
             } else {
-                throw new ResourceNotFoundException("User already exists");
+                    throw new ResourceNotFoundException("User already exists");
             }
         } catch (Exception e) {
             System.out.printf("Error: %s", e.getMessage());

@@ -1,5 +1,5 @@
 "use client"
-
+import DialogBox from "./DialogBox"
 import { useContext, useState } from "react"
 import { AppContext } from "@/lib/app-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -54,10 +54,37 @@ export default function TeamView() {
 
     setIsDialogOpen(false)
   }
+    const[openDialog,setOpenDialog] = useState(false)
 
+  const inputs=[
+    {
+      name:"Name",
+      type:"text"
+    },
+    {
+      name:"Designation",
+      type:"text"
+    },
+    {
+      name:"Email",
+      type:"email"
+    },
+    {
+      name:"Phone number",
+      type:"phone"
+    },
+    {
+      name:"Task Assigned",
+      type:"number"
+    },
+    {
+      name:"Task Completed",
+      type:"number"
+    },
+  ]
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Team Members</h1>
           <p className="text-muted-foreground">Manage your team and assign tasks.</p>
@@ -130,8 +157,12 @@ export default function TeamView() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-
+      </div> */}
+    
+    {
+      openDialog &&
+    <DialogBox inputs={inputs} title={"Create new project"} handler={setOpenDialog}/>
+     }
       {appData.teamMembers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 border rounded-lg bg-muted/50">
           <p className="text-muted-foreground mb-4">No team members found</p>
@@ -141,7 +172,12 @@ export default function TeamView() {
           </Button>
         </div>
       ) : (
+        <div>
+          <div className="flex flex-row-reverse justify-between">
+            <button className="bg-primary text-white px-4 py-3 rounded text-sm my-3" onClick={()=>setOpenDialog(true)}>+ Add Team Member</button>
+          </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          
           {appData.teamMembers.map((member) => {
             // Count tasks assigned to this member
             const assignedTasks = appData.tasks.filter((task) => task.assigneeId === member.id)
@@ -198,6 +234,7 @@ export default function TeamView() {
               </Card>
             )
           })}
+        </div>
         </div>
       )}
     </div>
