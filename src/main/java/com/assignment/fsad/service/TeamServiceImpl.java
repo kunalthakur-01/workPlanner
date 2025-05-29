@@ -21,12 +21,23 @@ public class TeamServiceImpl implements TeamService{
     private UserRepository userRepository;
 
     @Override
-    public Team createTeam(Team team) {
+    public Team createTeam(Team team, UUID ownerId) {
         Team newTeam = null;
         try {
+            if(team == null) {
+                throw new NullPointerException("Team is NULL");
+            }
+            User owner = userRepository.findById(ownerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            team.setOwner(owner);
             newTeam = teamRepository.save(team);
-        } catch (Exception e) {
-            throw new InternalServerException("Failed to create team");
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         return newTeam;
     }
@@ -40,7 +51,10 @@ public class TeamServiceImpl implements TeamService{
         try {
             return teamRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+        catch (Exception e) {
             throw new InternalServerException("Failed to retrieve team");
         }
     }
@@ -92,9 +106,16 @@ public class TeamServiceImpl implements TeamService{
 //             Assuming you have a method to find user by ID
              User user = userRepository.findById(userId)
                      .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                if (team.getMembers().contains(user)) {
+                    throw new InternalServerException("User is already a member of the team");
+                }
              team.getMembers().add(user);
              teamRepository.save(team);
-        } catch (Exception e) {
+        }
+        catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+        catch (Exception e) {
             throw new InternalServerException("Failed to add member to team");
         }
     }

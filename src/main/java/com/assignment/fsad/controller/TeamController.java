@@ -4,7 +4,6 @@ import com.assignment.fsad.models.Team;
 import com.assignment.fsad.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +25,12 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-     @PostMapping("/create")
-     public ResponseEntity<Team> createTeam(@Validated @RequestBody Team team) {
+     @PostMapping("{ownerId}/create")
+     public ResponseEntity<Team> createTeam(@RequestBody Team team, @PathVariable UUID ownerId) {
          if (team.getTeamName() == null || team.getTeamName().isEmpty()) {
              return ResponseEntity.badRequest().build();
          }
-         Team newTeam = teamService.createTeam(team);
+         Team newTeam = teamService.createTeam(team, ownerId);
          return ResponseEntity.created(URI.create("/api/v1/team/" + newTeam.getId())).body(newTeam);
      }
     // Example method to get team details
@@ -56,10 +55,10 @@ public class TeamController {
          return ResponseEntity.noContent().build();
      }
 
-     @PostMapping("/{teamId}/addUser/{userId}")
-    public void addMemberToTeam(@PathVariable UUID teamId, @PathVariable UUID userId) {
+     @GetMapping("/{teamId}/addUser/{userId}")
+     public void addMemberToTeam(@PathVariable UUID teamId, @PathVariable UUID userId) {
         teamService.addMemberToTeam(teamId, userId);
-    }
+     }
     // Example method to get teams by user ID
 //     @GetMapping("/user/{userId}")
 //     public ResponseEntity<List<Team>> getTeamsByUserId(@PathVariable Long userId) {
