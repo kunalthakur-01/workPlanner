@@ -51,3 +51,16 @@ workPlanner/
 ```bash
 git clone https://github.com/kunalthakur-01/workPlanner.git
 cd workPlanner
+```
+
+#### To run the application:
+## Frontend:
+```bash
+cd client
+npm run dev
+```
+
+## Backend:
+```bash
+mvn spring-boot:run
+```
