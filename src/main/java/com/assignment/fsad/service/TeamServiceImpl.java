@@ -2,8 +2,10 @@ package com.assignment.fsad.service;
 
 import com.assignment.fsad.exception.InternalServerException;
 import com.assignment.fsad.exception.ResourceNotFoundException;
+import com.assignment.fsad.models.Task;
 import com.assignment.fsad.models.Team;
 import com.assignment.fsad.models.User;
+import com.assignment.fsad.repository.TaskRepository;
 import com.assignment.fsad.repository.TeamRepository;
 import com.assignment.fsad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService{
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -117,6 +122,27 @@ public class TeamServiceImpl implements TeamService{
         }
         catch (Exception e) {
             throw new InternalServerException("Failed to add member to team");
+        }
+    }
+
+    @Override
+    public void addTaskToTeam(UUID teamId, UUID taskId) {
+        if (teamId == null || taskId == null) {
+            throw new NullPointerException("Team ID or Task ID is NULL");
+        }
+
+        try {
+            Team team = teamRepository.findById(teamId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+            // Assuming you have a method to find task by ID
+             Task task = taskRepository.findById(taskId)
+                     .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+             team.getTasks().add(task);
+             teamRepository.save(team);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new InternalServerException("Failed to add task to team");
         }
     }
 

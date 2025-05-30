@@ -3,6 +3,8 @@ package com.assignment.fsad.models;
 import com.assignment.fsad.enums.TaskPriority;
 import com.assignment.fsad.enums.TaskType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +40,7 @@ public class Task {
 
     private String status;
 
+    @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
     @OneToOne

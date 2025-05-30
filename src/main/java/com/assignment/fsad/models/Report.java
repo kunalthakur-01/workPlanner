@@ -4,11 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -26,9 +30,11 @@ public class Report {
 
     private String reportDescription;
 
-    private String reportType;
-
-    private String reportStatus;
-
     private String reportCreatedOnDate;
+
+    @OneToOne
+    private User reportee;
+
+    @OneToMany
+    private List<Task> tasks = new ArrayList<>();
 }

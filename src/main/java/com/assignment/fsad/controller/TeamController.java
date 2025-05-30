@@ -59,6 +59,11 @@ public class TeamController {
      public void addMemberToTeam(@PathVariable UUID teamId, @PathVariable UUID userId) {
         teamService.addMemberToTeam(teamId, userId);
      }
+
+     @GetMapping("/{teamId}/addTask/{taskId}")
+    public void addTaskToTeam(@PathVariable UUID teamId, @PathVariable UUID taskId) {
+        teamService.addTaskToTeam(teamId, taskId);
+     }
     // Example method to get teams by user ID
 //     @GetMapping("/user/{userId}")
 //     public ResponseEntity<List<Team>> getTeamsByUserId(@PathVariable Long userId) {
