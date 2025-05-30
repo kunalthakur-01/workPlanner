@@ -19,7 +19,17 @@ function Dashboard() {
   const { appData } = useAppContext()
   const [userRole, setUserRole] = useState(null)
   const [userName, setUserName] = useState("")
+  
   const [dashboardTab, setDashboardTab] = useState("overview")
+  const [tasks, setTasks] = useState(0);
+  const [team, setTeam] = useState(0);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/v1/task/all")
+      .then((res) => res.json)
+      .then((data) => setTasks(data.length));
+  });
+
 
   useEffect(() => {
     const role = localStorage.getItem("userRole")

@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AppContext } from "@/lib/app-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -27,6 +27,24 @@ export default function ManagerDashboard() {
 
   // Get recent tasks
   const recentTasks = [...appData.tasks].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5)
+
+
+  const [tasks, setTasks] = useState(0);
+  const [team, setTeam] = useState(0);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/v1/task/all")
+      .then((res) => res.json())
+      .then((data) => setTasks(data.length));
+    
+    fetch("http://localhost:8080/api/v1/people/all")
+      .then((res) => res.json())
+      .then((data) => setTeam(data.length));
+  });
+
+
+
+
 
   return (
     <div className="p-6 space-y-6">
@@ -55,7 +73,7 @@ export default function ManagerDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalTeamMembers}</div>
+            <div className="text-2xl font-bold">{team}</div>
           </CardContent>
         </Card>
 
@@ -65,7 +83,7 @@ export default function ManagerDashboard() {
             <CheckSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalTasks}</div>
+            <div className="text-2xl font-bold">{tasks}</div>
           </CardContent>
         </Card>
 

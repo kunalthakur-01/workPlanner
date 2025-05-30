@@ -44,9 +44,9 @@ public class Task {
     @JoinColumn(name = "assignee")
     private User assignee;
 
-    @OneToOne
-    @JoinColumn(name = "reporter")
-    private User reporter;
+    private int project;
+
+    private String assignedTo;
 
     private Date dueDate;
 

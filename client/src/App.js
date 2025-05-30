@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom"
 import { AppProvider } from "./context/AppContext"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
@@ -12,6 +12,7 @@ import Reports from "./pages/Reports"
 import ProtectedRoute from "./components/ProtectedRoute"
 import { initialData } from "./data/initialData"
 import Signup from "./pages/Signup"
+import ProjectDetails from "./pages/details"
 
 function App() {
   const [appData, setAppData] = useState(initialData)
@@ -28,14 +29,23 @@ function App() {
 
   return (
     <AppProvider value={{ appData, setAppData, notifications, addNotification }}>
+      <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+    
         <Route
           path="/"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/details"
+          element={
+          
+              <ProjectDetails />
           }
         />
         <Route
@@ -72,6 +82,7 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </BrowserRouter>
     </AppProvider>
   )
 }
